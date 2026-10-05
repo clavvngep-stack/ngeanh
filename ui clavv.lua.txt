@@ -472,6 +472,7 @@ function Library:Window(Args)
         Parent = ClavvHub,
         AnchorPoint = Vector2.new(0.5, 0.5),
         BackgroundColor3 = Color3.fromRGB(13, 10, 20),
+        BackgroundTransparency = 0.15,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -2455,7 +2456,6 @@ function Library:Window(Args)
 
     do
         PageService:JumpTo(Home_1)
-        Library:Draggable(Background_1) 
 
         PageService.HorizontalAlignment = Enum.HorizontalAlignment.Left
         PageService.EasingStyle = Enum.EasingStyle.Exponential
@@ -2527,8 +2527,6 @@ function Library:Window(Args)
                 Scale = 1
             })
 
-            Library:Draggable(Pillow_1)
-
             -- Animasi hover / tekan pada tombol
             local function PillowTween(Scale)
                 TweenService:Create(PillowScale, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Scale = Scale}):Play()
@@ -2588,11 +2586,11 @@ function Library:Window(Args)
         end
 
         do
-            local WindowSize = 1.45
+            local WindowSize = 1.3
             
             local Scaler = Library:Create("UIScale", {
                 Parent = ClavvHub,
-                Scale = if Mobile then 1 else WindowSize
+                Scale = if Mobile then 0.88 else WindowSize
             })
             
             function Library:SizeSlider(Page, Plugins)
