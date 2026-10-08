@@ -912,7 +912,8 @@ function Library:Window(Args)
         BorderSizePixel = 0,
         Size = UDim2.new(1, 0, 1, 0),
         ClipsDescendants = true,
-        AutomaticCanvasSize = Enum.AutomaticSize.None,
+        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
         BottomImage = "rbxasset://textures/ui/Scroll/scroll-bottom.png",
         CanvasPosition = Vector2.new(0, 0),
         ElasticBehavior = Enum.ElasticBehavior.WhenScrollable,
@@ -920,7 +921,7 @@ function Library:Window(Args)
         ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
         ScrollBarImageTransparency = 0,
         ScrollBarThickness = 0,
-        ScrollingDirection = Enum.ScrollingDirection.XY,
+        ScrollingDirection = Enum.ScrollingDirection.Y,
         TopImage = "rbxasset://textures/ui/Scroll/scroll-top.png",
         VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
     })
@@ -940,10 +941,6 @@ function Library:Window(Args)
         SortOrder = Enum.SortOrder.LayoutOrder,
         Wraps = true
     })
-
-    UIListLayout_1:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        MainTabsScrolling.CanvasSize = UDim2.new(0, 0, 0, UIListLayout_1.AbsoluteContentSize.Y + 15)
-    end)
 
     local PageService: UIPageLayout = Library:Create("UIPageLayout", {
         Parent = Scale_1
@@ -1125,7 +1122,8 @@ function Library:Window(Args)
             BorderSizePixel = 0,
             Size = UDim2.new(1, 0, 1, 0),
             ClipsDescendants = true,
-            AutomaticCanvasSize = Enum.AutomaticSize.None,
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            CanvasSize = UDim2.new(0, 0, 0, 0),
             BottomImage = "rbxasset://textures/ui/Scroll/scroll-bottom.png",
             CanvasPosition = Vector2.new(0, 0),
             ElasticBehavior = Enum.ElasticBehavior.WhenScrollable,
@@ -1134,7 +1132,7 @@ function Library:Window(Args)
             ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
             ScrollBarImageTransparency = 0,
             ScrollBarThickness = 0,
-            ScrollingDirection = Enum.ScrollingDirection.XY,
+            ScrollingDirection = Enum.ScrollingDirection.Y,
             TopImage = "rbxasset://textures/ui/Scroll/scroll-top.png",
             VerticalScrollBarInset = Enum.ScrollBarInset.None,
             VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
@@ -1142,7 +1140,7 @@ function Library:Window(Args)
 
         Library:Create("UIPadding", {
             Parent = PageScrolling_1,
-            PaddingBottom = UDim.new(0, 1),
+            PaddingBottom = UDim.new(0, 14),
             PaddingLeft = UDim.new(0, 15),
             PaddingRight = UDim.new(0, 15),
             PaddingTop = UDim.new(0, 1)
@@ -1154,10 +1152,6 @@ function Library:Window(Args)
             FillDirection = Enum.FillDirection.Vertical,
             SortOrder = Enum.SortOrder.LayoutOrder
         })
-
-        UIListLayout_2:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            PageScrolling_1.CanvasSize = UDim2.new(0, 0, 0, UIListLayout_2.AbsoluteContentSize.Y + 15)
-        end)
 
         local function OnChangPage()
             local RightTweening = Library:Tween({
@@ -1209,6 +1203,216 @@ function Library:Window(Args)
             })
 
             return Title
+        end
+
+        -- ================================================================
+        -- COLLAPSIBLE SECTION (accordion): judul dengan panah, klik untuk
+        -- membuka / menutup daftar fitur di dalamnya.
+        --   local Combat = Page:Collapsible({ Title = "Auto Combat", Open = false })
+        --   Combat:Toggle({...}); Combat:Button({...}); Combat:Slider({...})
+        --   Combat:SetOpen(true) / Combat:IsOpen()
+        -- ================================================================
+        function Page:Collapsible(Args)
+            if type(Args) == "string" then Args = { Title = Args } end
+            Args = Args or {}
+
+            local HeaderHeight = 36
+            local Opened = Args.Open == true
+
+            local Group = Library:Create("Frame", {
+                Name = "Collapsible",
+                Parent = PageScrolling_1,
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticSize = Enum.AutomaticSize.Y
+            })
+
+            Library:Create("UIListLayout", {
+                Parent = Group,
+                Padding = UDim.new(0, 5),
+                SortOrder = Enum.SortOrder.LayoutOrder
+            })
+
+            local Header = Library:Create("Frame", {
+                Name = "Header",
+                Parent = Group,
+                BackgroundColor3 = Color3.fromRGB(18, 14, 27),
+                BorderSizePixel = 0,
+                LayoutOrder = 1,
+                Size = UDim2.new(1, 0, 0, HeaderHeight)
+            })
+
+            Library:Create("UICorner", { Parent = Header, CornerRadius = UDim.new(0, 3) })
+
+            Library:Create("UIStroke", {
+                Parent = Header,
+                Color = Color3.fromRGB(58, 48, 78),
+                Thickness = 0.8
+            })
+
+            Library:Create("Frame", {
+                Name = "Accent",
+                Parent = Header,
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundColor3 = Color3.fromRGB(124, 84, 196),
+                BorderSizePixel = 0,
+                Position = UDim2.new(0, 0, 0.5, 0),
+                Size = UDim2.new(0, 3, 0.6, 0)
+            })
+
+            Library:Create("TextLabel", {
+                Name = "Title",
+                Parent = Header,
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                Position = UDim2.new(0, 14, 0.5, 0),
+                Size = UDim2.new(1, -50, 1, 0),
+                Font = Enum.Font.GothamBold,
+                RichText = true,
+                Text = tostring(Args.Title or "Section"),
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = 13,
+                TextStrokeTransparency = 0.7,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                TextTruncate = Enum.TextTruncate.AtEnd
+            })
+
+            local Arrow = Library:Create("TextLabel", {
+                Name = "Arrow",
+                Parent = Header,
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                Position = UDim2.new(1, -20, 0.5, 0),
+                Size = UDim2.new(0, 20, 0, 20),
+                Font = Enum.Font.GothamBold,
+                Text = ">",
+                TextColor3 = Color3.fromRGB(150, 110, 220),
+                TextSize = 16,
+                Rotation = if Opened then 90 else 0
+            })
+
+            local Content = Library:Create("Frame", {
+                Name = "Content",
+                Parent = Group,
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                ClipsDescendants = true,
+                LayoutOrder = 2,
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticSize = if Opened then Enum.AutomaticSize.Y else Enum.AutomaticSize.None,
+                Visible = Opened
+            })
+
+            Library:Create("UIPadding", {
+                Parent = Content,
+                PaddingLeft = UDim.new(0, 8),
+                PaddingRight = UDim.new(0, 2),
+                PaddingTop = UDim.new(0, 2),
+                PaddingBottom = UDim.new(0, 2)
+            })
+
+            local ContentLayout = Library:Create("UIListLayout", {
+                Parent = Content,
+                Padding = UDim.new(0, 5),
+                SortOrder = Enum.SortOrder.LayoutOrder
+            })
+
+            -- faktor skala (UIScale) supaya animasi tinggi tetap akurat
+            local function GetFactor()
+                local f = Header.AbsoluteSize.Y / HeaderHeight
+                if f <= 0 then f = 1 end
+                return f
+            end
+
+            local HeightTween
+            local Gen = 0
+
+            local function SetOpen(State)
+                if State == Opened then return end
+                Opened = State
+                Gen += 1
+                local MyGen = Gen
+
+                if HeightTween then HeightTween:Cancel() end
+
+                TweenService:Create(Arrow, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    Rotation = if State then 90 else 0
+                }):Play()
+
+                local f = GetFactor()
+
+                if State then
+                    local From = Content.AbsoluteSize.Y / f
+                    Content.AutomaticSize = Enum.AutomaticSize.None
+                    Content.Size = UDim2.new(1, 0, 0, if Content.Visible then From else 0)
+                    Content.Visible = true
+
+                    local Target = ContentLayout.AbsoluteContentSize.Y / f + 4
+                    HeightTween = TweenService:Create(Content, TweenInfo.new(0.28, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+                        Size = UDim2.new(1, 0, 0, Target)
+                    })
+                    HeightTween.Completed:Connect(function()
+                        if MyGen == Gen and Opened then
+                            Content.AutomaticSize = Enum.AutomaticSize.Y
+                        end
+                    end)
+                    HeightTween:Play()
+                else
+                    local From = Content.AbsoluteSize.Y / f
+                    Content.AutomaticSize = Enum.AutomaticSize.None
+                    Content.Size = UDim2.new(1, 0, 0, From)
+
+                    HeightTween = TweenService:Create(Content, TweenInfo.new(0.22, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+                        Size = UDim2.new(1, 0, 0, 0)
+                    })
+                    HeightTween.Completed:Connect(function(PlaybackState)
+                        if MyGen == Gen and not Opened and PlaybackState == Enum.PlaybackState.Completed then
+                            Content.Visible = false
+                        end
+                    end)
+                    HeightTween:Play()
+                end
+            end
+
+            local Click = Library:Button(Header)
+            Click.MouseButton1Click:Connect(function()
+                if Library:IsDropdownOpen() then return end
+                SetOpen(not Opened)
+            end)
+
+            -- Object yang dikembalikan: komponen yang sama seperti Page,
+            -- tapi isinya masuk ke dalam section ini.
+            local Section = {}
+
+            for _, Name in ipairs({ "Section", "Paragraph", "RightLabel", "Button", "Toggle", "Slider", "Input", "Dropdown", "Banner" }) do
+                Section[Name] = function(_, ...)
+                    local Previous = PageScrolling_1
+                    PageScrolling_1 = Content
+                    local Results = table.pack(pcall(Page[Name], Page, ...))
+                    PageScrolling_1 = Previous
+
+                    if not Results[1] then
+                        error(Results[2], 0)
+                    end
+
+                    return table.unpack(Results, 2, Results.n)
+                end
+            end
+
+            function Section:SetOpen(State)
+                SetOpen(State and true or false)
+            end
+
+            function Section:IsOpen()
+                return Opened
+            end
+
+            Section.Instance = Group
+
+            return Section
         end
 
         function Page:Paragraph(Args)
@@ -2156,7 +2360,10 @@ function Library:Window(Args)
                     BorderSizePixel = 0,
                     Size = UDim2.new(1, 0, 0, 160),
                     ZIndex = 500,
-                    ScrollBarThickness = 0
+                    ScrollBarThickness = 0,
+                    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                    CanvasSize = UDim2.new(0, 0, 0, 0),
+                    ScrollingDirection = Enum.ScrollingDirection.Y
                 })
 
                 local ScrollLayout = Library:Create("UIListLayout", {
@@ -2171,10 +2378,6 @@ function Library:Window(Args)
                     PaddingLeft = UDim.new(0, 1),
                     PaddingRight = UDim.new(0, 1)
                 })
-
-                ScrollLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
-                    List_1.CanvasSize = UDim2.new(0, 0, 0, ScrollLayout.AbsoluteContentSize.Y + 15)
-                end)
 
                 local selectedValues = {}
                 local selectedOrder = 0
