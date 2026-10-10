@@ -1,13 +1,13 @@
 --[[ ============================================================
-    Clavv Hub Integrated v2 — Violence District
-    • FIX: AddDivider, AddSubSection, SetValues, SetContent, SetValue/GetValue
-    • W424 Features (semua fitur, UI via Clavv Hub)
-    • + 6 Fitur CatHub: Kill Target, Fly, Noclip, Team Target, Aim Smooth, Tesla ESP
-    • FIX v3: Invisible — loadstring MengHub (404) + tombol InvisButtonGui DIHAPUS, di-inline penuh
-    • FIX v4: Tab CatHub Extra DIHAPUS — 6 fitur dipindah ke tab sesuai fungsi + redam error spam
-    • FIX v5: Tab PARRY baru (di bawah Killer) — semua fitur parry dipindah dari Survivor; 6 text-box numerik diubah jadi slider; slider Parry Radius duplikat dihapus
-    • FIX v6: Slider Speed Boost ditambahkan; Tab GENERATOR baru; label 'W424'→'ClavvHub'
-    • FIX v7: Auto Hook bug STUCK diperbaiki (paksa drop + blacklist target gagal + finally reset); UI ClavvHub dipindah ke gethui/CoreGui agar TIDAK HILANG saat round/lobby selesai; fitur Kill Target (Killer) dihapus
+    Clavv Hub Integrated v2 â€” Violence District
+    â€¢ FIX: AddDivider, AddSubSection, SetValues, SetContent, SetValue/GetValue
+    â€¢ W424 Features (semua fitur, UI via Clavv Hub)
+    â€¢ + 6 Fitur CatHub: Kill Target, Fly, Noclip, Team Target, Aim Smooth, Tesla ESP
+    â€¢ FIX v3: Invisible â€” loadstring MengHub (404) + tombol InvisButtonGui DIHAPUS, di-inline penuh
+    â€¢ FIX v4: Tab CatHub Extra DIHAPUS â€” 6 fitur dipindah ke tab sesuai fungsi + redam error spam
+    â€¢ FIX v5: Tab PARRY baru (di bawah Killer) â€” semua fitur parry dipindah dari Survivor; 6 text-box numerik diubah jadi slider; slider Parry Radius duplikat dihapus
+    â€¢ FIX v6: Slider Speed Boost ditambahkan; Tab GENERATOR baru; label 'W424'â†’'ClavvHub'
+    â€¢ FIX v7: Auto Hook bug STUCK diperbaiki (paksa drop + blacklist target gagal + finally reset); UI ClavvHub dipindah ke gethui/CoreGui agar TIDAK HILANG saat round/lobby selesai; fitur Kill Target (Killer) dihapus
     ============================================================ ]]
 if getgenv and getgenv().ClavvLoaded then return end
 if getgenv then getgenv().ClavvLoaded = true end
@@ -119,7 +119,7 @@ function ClavvLib.createParagraph(tc, text)
     return { FindFirstChildOfClass = function() return nil end, SetContent = function() end, UI = nil }
 end
 -- =====================================================================
--- AKHIR ADAPTER — Engine asli mulai di bawah (verbatim)
+-- AKHIR ADAPTER â€” Engine asli mulai di bawah (verbatim)
 -- =====================================================================
 
 ClavvShim = {}
@@ -290,11 +290,11 @@ end
     4. Team Target   5. Aim Smooth   6. Tesla ESP
     ============================================================ ]]
 --[[ ============================================================
-    CAT HUB EXTRA — TAB DIHAPUS (v4). 6 fitur dipindah ke tab sesuai fungsi:
-    • Fly + Fly Speed + Noclip  → Survivor (Movement Extra)
-    • Team Target + Aim Smooth  → Aimbot (Aimbot Extra)
-    • Tesla ESP                 → ESP (Extra ESP)
-    • + Slider Parry Radius baru → Survivor (Auto Parry Extra)
+    CAT HUB EXTRA â€” TAB DIHAPUS (v4). 6 fitur dipindah ke tab sesuai fungsi:
+    â€¢ Fly + Fly Speed + Noclip  â†’ Survivor (Movement Extra)
+    â€¢ Team Target + Aim Smooth  â†’ Aimbot (Aimbot Extra)
+    â€¢ Tesla ESP                 â†’ ESP (Extra ESP)
+    â€¢ + Slider Parry Radius baru â†’ Survivor (Auto Parry Extra)
     ============================================================ ]]
 -- State & helper (langsung jalan, UI ditanam deferred setelah tab W424 siap)
 local CH = {
@@ -463,7 +463,7 @@ task.delay(2, function()
 			end
 		end
 	end)
-	notif"Clavv Hub terintegrasi �\128\148 UI terpisah disembunyikan"
+	notif"Clavv Hub terintegrasi â\128\148 UI terpisah disembunyikan"
 end)
 
 -- Unload support
@@ -479,7 +479,7 @@ end
 (function()
 --[[ Violence District Script - W424 Leaked 
 Credits = @LeekGuy / @OtherHub  |  24/09/2026
-Discord = discord.gg/ndxRJ3vR68
+Discord = https://discord.gg/zzxGxj27BN
 Feature :
 Invisible OP (With MengHub API : We will upload it too)
 Silent Aim (Veil, ToF, More)
@@ -488,7 +488,7 @@ Notes For Dev  (W424) : cool.., and nice AI
 ]]
 
 
-pcall(function() if setclipboard then setclipboard"discord.gg/ndxRJ3vR68" end end)
+pcall(function() if setclipboard then setclipboard"https://discord.gg/zzxGxj27BN" end end)
 pcall(function() if notif then notif(("Discord di-copy ke clipboard!"), 3) end end)
 
 -- =================================
@@ -740,7 +740,7 @@ function ListenToParryResult()
                         Config.Surv_AutoParry = false
                         task.wait(0.1)
                         Config.Surv_AutoParry = true
-                        print"[Parry] Reset toggle (OFF�\134\146ON) pada detik ke-10"
+                        print"[Parry] Reset toggle (OFFâ\134\146ON) pada detik ke-10"
                     end
                     State.ResetTimerThread = nil
                 end)
@@ -1580,8 +1580,8 @@ InfoSection:AddButton({
 InvisibleSection = Tabs.Survivor:AddSection"Invisible"
 
     -- [FIX v3] Invisible DI-INLINE TOTAL:
-    --  + loadstring MengHub (https://raw.githubusercontent.com/GrexXMeng/.../Invisibility) DIHAPUS — URL mati (HTTP 404)
-    --  + Tombol mengambang InvisButtonGui (UI terpisah di CoreGui) DIHAPUS — cukup toggle Clavv Hub
+    --  + loadstring MengHub (https://raw.githubusercontent.com/GrexXMeng/.../Invisibility) DIHAPUS â€” URL mati (HTTP 404)
+    --  + Tombol mengambang InvisButtonGui (UI terpisah di CoreGui) DIHAPUS â€” cukup toggle Clavv Hub
     --  + Fungsi asli diambil alih penuh secara inline (method: invis-chair / seat teleport desync + transparency)
     local invis_on = false
     local _invisChair = nil
@@ -1636,7 +1636,7 @@ InvisibleSection = Tabs.Survivor:AddSection"Invisible"
                     end
                 end
             end
-            print"[Clavv Hub v3] Invisible aktif (inline �\128\148 no loadstring, no extra UI)"
+            print"[Clavv Hub v3] Invisible aktif (inline â\128\148 no loadstring, no extra UI)"
         end,
         disable = function()
             if _invisChair then
@@ -1708,7 +1708,7 @@ InvisibleSection = Tabs.Survivor:AddSection"Invisible"
         end
     end
 
-    InvisibleSection:AddParagraph"INFO: Invisible benar-benar menghilangkan karakter (bukan visual saja). Sudah inline �\128\148 tanpa loadstring & tanpa tombol terpisah."
+    InvisibleSection:AddParagraph"INFO: Invisible benar-benar menghilangkan karakter (bukan visual saja). Sudah inline â\128\148 tanpa loadstring & tanpa tombol terpisah."
 
     InvisibleSection:AddToggle({
         Title = ("Invisible"),
@@ -1763,7 +1763,7 @@ local function startMoonwalk()
         local cHum = c:FindFirstChildOfClass"Humanoid"
         if not cHrp or not cHum or cHum.Health <= 0 then return end
 
-        -- Moonwalk: hanya gerak saat user tekan maju (W) → karakter berjalan MUNDUR
+        -- Moonwalk: hanya gerak saat user tekan maju (W) â†’ karakter berjalan MUNDUR
         local fwd = UserInputService:IsKeyDown(Enum.KeyCode.W) or UserInputService:IsKeyDown(Enum.KeyCode.Up)
         if fwd then
             cHum:Move(cHrp.CFrame.LookVector * -1.5, false)
@@ -2267,7 +2267,7 @@ MovementSection:AddToggle({
         statusLabel.Name = ("MapStatus")
         statusLabel.Size = UDim2.new(1, 0, 0, 14)
         statusLabel.Position = UDim2.new(0, 0, 0, 21)
-        statusLabel.Text = ("Status: �\128\148")
+        statusLabel.Text = ("Status: â\128\148")
         statusLabel.Font = Enum.Font.Gotham
         statusLabel.TextSize = 9.5
         statusLabel.TextColor3 = Color3.fromRGB(120, 180, 255)
@@ -2344,7 +2344,7 @@ MovementSection:AddToggle({
                             mainFrame.MapStatus.Text = ("Status: Lobby")
                             mainFrame.MapStatus.TextColor3 = Color3.fromRGB(100, 255, 100)
                         else
-                            mainFrame.MapName.Text = ("Map: �\128\148")
+                            mainFrame.MapName.Text = ("Map: â\128\148")
                             mainFrame.MapStatus.Text = ("Status: Lobby")
                             mainFrame.MapStatus.TextColor3 = Color3.fromRGB(160, 160, 160)
                         end
@@ -2420,7 +2420,7 @@ MovementSection:AddToggle({
     minimizeBtn.Size = UDim2.new(0, 14, 0, 14)
     minimizeBtn.Position = UDim2.new(1, -15, 0, 0)
     minimizeBtn.BackgroundTransparency = 1
-    minimizeBtn.Text = ("�\136\146")
+    minimizeBtn.Text = ("â\136\146")
     minimizeBtn.TextColor3 = Color3.fromRGB(180, 180, 180)
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.TextSize = 11
@@ -2589,7 +2589,7 @@ MovementSection:AddToggle({
             divider.Visible = true
             tabBar.Visible = true
             pageContainer.Visible = true
-            minimizeBtn.Text = ("�\136\146")
+            minimizeBtn.Text = ("â\136\146")
         else
             mainFrame.Size = UDim2.new(0, 160, 0, MIN_H)
             divider.Visible = false
@@ -2679,7 +2679,7 @@ MovementSection:AddToggle({
                 end
                 local p = displayPerks[i]
                 local lvlText = p.Level and ((" lvl ") .. p.Level) or ("")
-                perkLabels[i].Text = ("�\128� ") .. p.Name .. lvlText
+                perkLabels[i].Text = ("â\128¢ ") .. p.Name .. lvlText
                 perkLabels[i].Visible = true
             end
             for i = #displayPerks + 1, #perkLabels do
@@ -2796,7 +2796,7 @@ end
         minimizeBtn.Size = UDim2.new(0, 18, 0, 18)
         minimizeBtn.Position = UDim2.new(1, -19, 0, 0)
         minimizeBtn.BackgroundTransparency = 1
-        minimizeBtn.Text = ("�\136\146")
+        minimizeBtn.Text = ("â\136\146")
         minimizeBtn.TextColor3 = Color3.fromRGB(180, 180, 180)
         minimizeBtn.Font = Enum.Font.GothamBold
         minimizeBtn.TextSize = 13
@@ -2825,7 +2825,7 @@ end
         bodyLayout.VerticalAlignment = Enum.VerticalAlignment.Center
         bodyLayout.Padding = UDim.new(0, 5)
 
-        -- 👁 Eye Icon — PUTIH, di depan
+        -- ðŸ‘ Eye Icon â€” PUTIH, di depan
         local eye = Instance.new(("ImageLabel"), body)
         eye.Name = ("EyeIcon")
         eye.Size = UDim2.new(0, 13, 0, 13)
@@ -2851,7 +2851,7 @@ end
                 mainFrame.Size = UDim2.new(0, 145, 0, 52)
                 divider.Visible = true
                 body.Visible = true
-                minimizeBtn.Text = ("�\136\146")
+                minimizeBtn.Text = ("â\136\146")
             else
                 mainFrame.Size = UDim2.new(0, 145, 0, 22)
                 divider.Visible = false
@@ -2974,7 +2974,7 @@ Config.Surv_ParrySafety     = false      -- cegah parry saat sibuk (vault, repai
 Config.Surv_ParryAggressive = false      -- parry tanpa peduli arah hadap killer
 Config.Surv_ParryCircle     = true       -- tampilkan lingkaran ESP radius
 Config.Surv_ParryRadius     = 15         -- jarak maksimum parry
-Config.Surv_ParryFace       = 0.7        -- sensitivitas arah hadap (0–1)
+Config.Surv_ParryFace       = 0.7        -- sensitivitas arah hadap (0â€“1)
 Config.Ignored_Skills_List  = {}         -- daftar skill yang diabaikan (contoh: "Hidden S1")
 
 
@@ -3103,7 +3103,7 @@ function ListenToParryResult()
 end
 ListenToParryResult()
 
--- 7. SENSOR PARRY – dipasang ke setiap karakter killer
+-- 7. SENSOR PARRY â€“ dipasang ke setiap karakter killer
 local Attached = {}  -- agar tidak double attach
 
 function AttachParrySensor(kChar)
@@ -3452,7 +3452,7 @@ task.spawn(function()
 end)
     
     AutoParrySection:AddParagraph({
-        Title = ("�\154��\143 PENTING"),
+        Title = ("â\154 ï¸\143 PENTING"),
         Content = ("Wajib dimatikan saat di lobby dan dinyalakan lagi saat ingame, Jika tidak mengalami crash WAJIB MENYALAKAB SKIP ENDSCREEN.")
     })
     
@@ -3767,7 +3767,7 @@ end)
     minimizeBtn.Size = UDim2.new(0, 14, 0, 14)
     minimizeBtn.Position = UDim2.new(1, -15, 0, 0)
     minimizeBtn.BackgroundTransparency = 1
-    minimizeBtn.Text = ("�\136\146")
+    minimizeBtn.Text = ("â\136\146")
     minimizeBtn.TextColor3 = Color3.fromRGB(180, 180, 180)
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.TextSize = 11
@@ -3977,7 +3977,7 @@ end)
             divider.Visible = true
             tabBar.Visible = true
             pageContainer.Visible = true
-            minimizeBtn.Text = ("�\136\146")
+            minimizeBtn.Text = ("â\136\146")
         else
             mainFrame.Size = UDim2.new(0, 145, 0, MIN_H)
             divider.Visible = false
@@ -5484,7 +5484,7 @@ do
 -- Buat Section dan Toggle
 local bypassallkillerSection = Tabs.Killer:AddSection"Bypass All Killer"
 bypassallkillerSection:AddParagraph({
-        Title = ("�\128��\143 PENJELASAN �\128��\143"),
+        Title = ("â\128¼ï¸\143 PENJELASAN â\128¼ï¸\143"),
         Content = ("Penjelasan tentang aim lock hidden, untuk atas itu di gunakan untuk lock target jadi ga bisa di geser layar nya, untuk mengatasi itu wajib menyalakan unlock juga.")
     })
 -- ==================== BYPASS LEAP COOLDOWN (HIDDEN) ====================
@@ -5505,7 +5505,7 @@ local function StartLeapBypass()
             end
         end
         if not leapFunction and not m2Function then
-            print"[Bypass Leap] tryActivate/playM2Animation tidak ditemukan (normal �\128\148 fitur ini hanya untuk killer Hidden)."
+            print"[Bypass Leap] tryActivate/playM2Animation tidak ditemukan (normal â\128\148 fitur ini hanya untuk killer Hidden)."
             return
         end
         while task.wait(0.1) do
@@ -5685,7 +5685,7 @@ do
     -- ============ TOGGLE UI ============
     bypassallkillerSection:AddToggle({
         Title = ("Aim Lock Hidden (Hold)"),
-        Content = ("Tahan M2 / tombol attack �\134\146 lock kamera. Lepas �\134\146 bebas."),
+        Content = ("Tahan M2 / tombol attack â\134\146 lock kamera. Lepas â\134\146 bebas."),
         Default = false,
         Keybind = true,
         Callback = function(state)
@@ -9849,7 +9849,7 @@ local function createTargetSelectorUI()
     minimizeBtn.Size = UDim2.new(0, 24, 1, 0)
     minimizeBtn.Position = UDim2.new(1, -26, 0, 0)
     minimizeBtn.BackgroundTransparency = 1
-    minimizeBtn.Text = ("�\136\146")
+    minimizeBtn.Text = ("â\136\146")
     minimizeBtn.TextColor3 = Color3.fromRGB(120, 120, 120)
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.TextSize = 14
@@ -9895,7 +9895,7 @@ local function createTargetSelectorUI()
             btnContainer.Visible = false
             frame.Size = UDim2.new(0, 240, 0, 22)
         else
-            minimizeBtn.Text = ("�\136\146")
+            minimizeBtn.Text = ("â\136\146")
             btnContainer.Visible = true
             frame.Size = UDim2.new(0, 240, 0, 58)
         end
@@ -11472,7 +11472,7 @@ end)()
 
 
 --[[ ============================================================
-    REAL FPS BOOST — turunkan graphics & matikan effect berat.
+    REAL FPS BOOST â€” turunkan graphics & matikan effect berat.
     Restore otomatis saat toggle OFF.
     ============================================================ ]]
 task.spawn(function()
