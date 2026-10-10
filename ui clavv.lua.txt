@@ -122,6 +122,9 @@ function Library.Effect(c, p)
     expandTween:Play()
 end
 
+-- Logo untuk setiap tab (ganti di sini jika ingin mengubahnya)
+Library.TabIcon = "rbxassetid://129731842758907"
+
 function Library:Asset(rbx)
     if typeof(rbx) == 'number' then
         return "rbxassetid://" .. rbx
@@ -951,7 +954,8 @@ function Library:Window(Args)
     function Window:NewPage(Args)
         local Title = Args.Title or "Unknow"
         local Desc = Args.Desc or "Description"
-        local Icon = Args.Icon or 127194456372995
+        -- Logo semua tab dipaksa memakai asset ini (Args.Icon diabaikan)
+        local Icon = Library.TabIcon
 
         local NewTabs = Library:Create("Frame", {
             Name = "NewTabs",
