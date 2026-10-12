@@ -1,5 +1,5 @@
 -- ============================================================
--- Clavv Hub Adapter — Huss Valley
+-- Clavv Hub Adapter â€” Huss Valley
 -- Logic: HussValley.txt (dipertahankan penuh)
 -- UI: Clavv Hub library (eksternal)
 -- ============================================================
@@ -57,38 +57,6 @@ end
 task.spawn(setupInfDash)
 -- ============================================================
 
--- ============================================================
--- SPEED BYPASS (dari script Unsecure) - anti WalkSpeed reset
--- Aktif OTOMATIS saat Runner Speed Override ATAU Catcher Speed
--- Override dinyalakan. Cara: set WalkSpeed terus-menerus di
--- RenderStepped (prioritas tertinggi) — walau game mereset,
--- bypass langsung menerapkan ulang di frame yang sama.
--- ============================================================
-RunService.RenderStepped:Connect(function()
-    local hum = getHumanoid()
-    if not hum then return end
-    local char = getCharacter()
-    if not char then return end
-    local role = getRole()
-    local native = tonumber(char:GetAttribute("MovementSpeed"))
-    if not native or native <= 0 then return end
-
-    local desired = native
-    local bypassAktif = false
-
-    if role == "Runner" and SETTINGS.customSpeed and SETTINGS.speedMultiplier > 1.0001 then
-        desired = native * math.clamp(SETTINGS.speedMultiplier, 1, 2)
-        bypassAktif = true
-    elseif role == "Catcher" and SETTINGS.catcherCustomSpeed and SETTINGS.catcherSpeedMultiplier > 1.0001 then
-        desired = native * math.clamp(SETTINGS.catcherSpeedMultiplier, 1, 2)
-        bypassAktif = true
-    end
-
-    if bypassAktif then
-        hum.WalkSpeed = desired  -- set PAKSA tanpa threshold (bypass anti-speed)
-    end
-end)
--- ============================================================
 
 local Game = COH:WaitForChild("Game")
 local Session = Game:WaitForChild("Session")
@@ -470,6 +438,39 @@ local function restoreNativeWalkSpeed()
     end
 end
 
+
+-- ============================================================
+-- SPEED BYPASS (dari script Unsecure) - anti WalkSpeed reset
+-- Aktif OTOMATIS saat Runner Speed Override ATAU Catcher Speed
+-- Override dinyalakan. Cara: set WalkSpeed terus-menerus di
+-- RenderStepped (prioritas tertinggi) â€” walau game mereset,
+-- bypass langsung menerapkan ulang di frame yang sama.
+-- ============================================================
+RunService.RenderStepped:Connect(function()
+    local hum = getHumanoid()
+    if not hum then return end
+    local char = getCharacter()
+    if not char then return end
+    local role = getRole()
+    local native = tonumber(char:GetAttribute("MovementSpeed"))
+    if not native or native <= 0 then return end
+
+    local desired = native
+    local bypassAktif = false
+
+    if role == "Runner" and SETTINGS.customSpeed and SETTINGS.speedMultiplier > 1.0001 then
+        desired = native * math.clamp(SETTINGS.speedMultiplier, 1, 2)
+        bypassAktif = true
+    elseif role == "Catcher" and SETTINGS.catcherCustomSpeed and SETTINGS.catcherSpeedMultiplier > 1.0001 then
+        desired = native * math.clamp(SETTINGS.catcherSpeedMultiplier, 1, 2)
+        bypassAktif = true
+    end
+
+    if bypassAktif then
+        hum.WalkSpeed = desired  -- set PAKSA tanpa threshold (bypass anti-speed)
+    end
+end)
+-- ============================================================
 local function refreshPing(now)
     if now - runtime.pingAt < 0.5 then
         return
@@ -4540,7 +4541,7 @@ end
 readMapVoteState()
 updateMapVoteStatusUI()
 
--- Scanner loop: Wheel (auto spin status) — tanpa dependensi UI Paragraph
+-- Scanner loop: Wheel (auto spin status) â€” tanpa dependensi UI Paragraph
 task.spawn(function()
     while true do
         task.wait(0.5)
@@ -4613,7 +4614,7 @@ RunService:BindToRenderStep(SPEED_RENDER_NAME, Enum.RenderPriority.Input.Value +
     end
 end)
 
--- Loop utama: Stable Controller — inilah yang menggerakkan
+-- Loop utama: Stable Controller â€” inilah yang menggerakkan
 -- auto run (runnerStep), auto chase (catcherStep), dan utility.
 local RENDER_NAME = "CoH_StableController"
 RunService:UnbindFromRenderStep(RENDER_NAME)
