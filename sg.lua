@@ -32443,12 +32443,32 @@ task.spawn(function()
         
 -- ============================================================
 -- HALLOWEEN EVENT ENGINE — extracted verbatim from ChiliHub (Steal An Egg)
--- 3 sections digabung: Halloween Event + Halloween Monsters + Ghost Dog & Fishing
--- Isolated in do...end + pcall agar tidak mengganggu Clavv Hub
+-- 3 sections merged: Halloween Event + Halloween Monsters + Ghost Dog & Fishing
+-- Toggles diganti mockToggle (kompatibel SQ/:Set), exposed ke getgenv().HalloweenState
+-- Error LOGGING (warn) — tidak ditelan diam-diam
 -- ============================================================
 task.spawn(function()
-    pcall(function()
-    do
+    local ok, err = pcall(function()
+-- MOCK TOGGLE: pengganti ChiliHub UI toggle (kompatibel dengan SQ() dan :Set())
+local function __mockToggle(default)
+    local t = {Value = default, Enabled = default}
+    function t:Set(v) t.Value = v; t.Enabled = v end
+    function t:Get() return t.Value end
+    return t
+end
+local ReplicatedStorageService
+ReplicatedStorageService = game:GetService("ReplicatedStorage")
+local CoreGuiService
+CoreGuiService = game:GetService("CoreGui")
+local UserInputServiceRef
+UserInputServiceRef = game:GetService("UserInputService")
+local CollectionServiceRef
+CollectionServiceRef = game:GetService("CollectionService")
+game:GetService("LocalizationService")
+local ProximityPromptServiceRef
+ProximityPromptServiceRef = game:GetService("ProximityPromptService")
+local LocalPlayerRef
+LocalPlayerRef = PlayersService.LocalPlayer
 local NetworkingPackage
 NetworkingPackage = ReplicatedStorageService:WaitForChild("Packages"):WaitForChild("Networking")
 local SafeRequire
@@ -51070,14 +51090,10 @@ end;
     local KQ=M;
     KQ.Wake();
     end;
-    H.Eggs_=f:CreateToggle({Name="Auto Steal Halloween Eggs",Default=false,Callback=function()UQ();
-    local KQ=V;
-    if KQ.StealPanelSync then pcall(V.StealPanelSync);
-    end;
-    end});
+    H.Eggs_=__mockToggle(false); -- Auto Steal Halloween Eggs
     m=V;
     m.HalloweenToggle=H.Eggs_;
-    H.Instant_=f:CreateToggle({Name="Instant Steal Halloween Eggs",Default=true});
+    H.Instant_=__mockToggle(true); -- Instant Steal Halloween Eggs
     H.Step=40;
     f:CreateSlider({Name="Steal Speed",Min=10,Max=100,Default=40,AllowDecimals=false,Increment=5,Unit=" st",Quick=false,Callback=function(KQ)H.Step=tonumber(KQ)or 40;
     end});
@@ -51125,16 +51141,16 @@ end;
     end});
     m=S;
     local B=m.MonsterSection or f;
-    H.Monsters_=B:CreateToggle({Name="Auto Farm Monsters",Default=false,Callback=UQ});
+    H.Monsters_=__mockToggle(false); -- Auto Farm Monsters
     B:CreateMultiDropdown({Name="Monsters To Kill",Options={"Candy Corn (+12 Candy)","Hollow Bat (+12 Candy)","Scarecrow (+28 Candy)","Chest Mimic (+28 Candy)","Pumpkin Golem (+65 Candy)","Soul Phantom (+65 Candy)"},Default={},Callback=function(KQ)local SQ={};
     for tQ,tQ in ipairs(type(KQ)=="table"and KQ or{})do SQ[tQ:match("^(.-) %(")or tQ]=true;
     end;
     H.MonsterKinds=SQ;
     end});
-    B:CreateDropdown({Name="Monster Order",Options={"Closest","Most Tokens"},Default="Closest",Callback=function(KQ)H.MonsterOrder=KQ;
+    H.MonsterOrder="Closest"; -- Monster Order default
     end});
     H.MonsterSpeed=300;
-    B:CreateSlider({Name="Walk Speed",Min=100,Max=1000,Default=300,AllowDecimals=false,Increment=10,Unit=" st/s",Quick=false,Callback=function(KQ)H.MonsterSpeed=tonumber(KQ)or 300;
+    H.MonsterSpeed=300; -- Monster Walk Speed default
     end});
     local KQ,SQ,tQ,MQ={},{},{},{};
     pcall(function()local BQ,oQ=next;
@@ -51196,15 +51212,16 @@ end;
     end);
     H.BatIds=tQ;
     H.ToolIds=MQ;
-    H.Pumpkin_=f:CreateToggle({Name="Auto Pumpkin Moon",Default=true,Callback=UQ});
+    H.Pumpkin_=__mockToggle(true); -- Auto Pumpkin Moon
     H.PumpkinSpeed=300;
-    f:CreateSlider({Name="Walk Speed",Min=100,Max=1000,Default=300,AllowDecimals=false,Increment=10,Unit=" st/s",Quick=false,Callback=function(KQ)H.PumpkinSpeed=tonumber(KQ)or 300;
+    H.PumpkinSpeed=300; -- Pumpkin Walk Speed default
     end});
-    H.Buy_=f:CreateToggle({Name="Auto Buy Halloween Dimension Egg",Default=false,Callback=UQ});
+    H.Buy_=__mockToggle(false); -- Auto Buy Halloween Dimension Egg
     m=S;
     f=m.GhostDogSection;
     local KQ=f:CreateText({Name="Ghost Dog Status",Text="Off"});
-    H.Dog_=f:CreateToggle({Name="Auto Ghost Dog Quest",Default=false,Callback=UQ});
+    H.Dog_=__mockToggle(false); -- Auto Ghost Dog Quest
+    H.Fishing_=__mockToggle(false); -- Halloween Fishing (added)
     H.Fishing_=f:CreateToggle({Name="Auto Fishing",Default=false,Callback=UQ});
     H.Charge=0.875;
     f:CreateDropdown({Name="Cast Luck",Options={"x1.5 Perfect","x1.2","x1.1","x1.0 Fastest"},Default="x1.5 Perfect",Callback=function(SQ)H.Charge=({["x1.2"]=1,["x1.1"]=0.5,["x1.0 Fastest"]=0.02})[SQ]or 0.875;
@@ -53433,15 +53450,38 @@ end;
     end);
     end
     SetupHalloweenAndMinigameEventsModule()
+
+-- EXPOSE Halloween state untuk Clavv Hub UI
+do
+    local function __exposeHW()
+        local st = {}
+        st.SetEggs = function(v) if H and H.Eggs_ then H.Eggs_:Set(v) end end
+        st.SetInstant = function(v) if H and H.Instant_ then H.Instant_:Set(v) end end
+        st.SetMonsters = function(v) if H and H.Monsters_ then H.Monsters_:Set(v) end end
+        st.SetPumpkin = function(v) if H and H.Pumpkin_ then H.Pumpkin_:Set(v) end end
+        st.SetBuy = function(v) if H and H.Buy_ then H.Buy_:Set(v) end end
+        st.SetDog = function(v) if H and H.Dog_ then H.Dog_:Set(v) end end
+        st.SetFishing = function(v) if H and H.Fishing_ then H.Fishing_:Set(v) end end
+        st.SetMonsterSpeed = function(v) if H then H.MonsterSpeed = tonumber(v) or 300 end end
+        st.SetPumpkinSpeed = function(v) if H then H.PumpkinSpeed = tonumber(v) or 300 end end
+        st.SetMonsterOrder = function(v) if H then H.MonsterOrder = v end end
+        if typeof(getgenv)=="function" then getgenv().HalloweenState = st; getgenv().HalloweenReady = true
+        else _G.HalloweenState = st; _G.HalloweenReady = true end
+        warn("[Halloween] Engine loaded & state exposed")
+    end
+    pcall(__exposeHW)
 end
 
-    end
     end)
+    if not ok then
+        warn("[Halloween] Engine error: " .. tostring(err))
+    else
+        warn("[Halloween] Engine loaded successfully")
+    end
 end)
 -- ============================================================
 -- END HALLOWEEN EVENT ENGINE
 -- ============================================================
-
 
 local eventTab = win:CreateTab({Name = "Event"})
         local function notif(msg) pcall(function()
@@ -53461,28 +53501,32 @@ local eventTab = win:CreateTab({Name = "Event"})
         secAA:CreateToggle({Name="Auto Ring Event", Desc="Glides Forest -> Angels & Demons -> back on loop.", Callback=function(s) if s==true then pcall(function() AA:startRing() end) else pcall(function() AA:stopRing() end) end notif("Auto Ring Event "..(s and "On" or "Off")) end})
         warn("[ClavvFix] Admin Abuse section created (7 toggles) + Enchanted Forest area added")
 
-
-        -- ================= HALLOWEEN EVENT SECTION (Clavv Hub UI) =================
-        -- 3 section ChiliHub digabung jadi 1: "Halloween" dengan sub-grouping
+        -- ================= HALLOWEEN EVENT (Clavv Hub UI — terhubung ke engine) =================
         local secHW = eventTab:CreateSection({Name = "Halloween Event"})
-        secHW:CreateToggle({Name="Auto Steal Halloween Eggs", Desc="Otomatis mencuri telur Halloween event.", Callback=function(s) notif("Auto Steal Halloween Eggs: "..(s and "On" or "Off")) end})
-        secHW:CreateToggle({Name="Instant Steal Halloween Eggs", Desc="Instant steal saat ambil telur Halloween.", Default=true, Callback=function(s) notif("Instant Steal: "..(s and "On" or "Off")) end})
-        secHW:CreateToggle({Name="Auto Pumpkin Moon", Desc="Tangkap pumpkin saat event Pumpkin Moon aktif.", Default=true, Callback=function(s) notif("Auto Pumpkin Moon: "..(s and "On" or "Off")) end})
-        secHW:CreateSlider({Name="Pumpkin Walk Speed", Min=100, Max=1000, Default=300, Increment=10, Desc="Kecepatan jalan saat Auto Pumpkin Moon."})
-        secHW:CreateToggle({Name="Auto Buy Halloween Dimension Egg", Desc="Beli telur Halloween Dimension otomatis.", Callback=function(s) notif("Auto Buy Hw Dim Egg: "..(s and "On" or "Off")) end})
-
-        -- Sub-group: Halloween Monsters
+        local function hwSet(fn, label)
+            return function(s)
+                local st = (typeof(getgenv)=="function" and getgenv().HalloweenState) or _G.HalloweenState
+                if st and type(st[fn])=="function" then
+                    pcall(st[fn], s==true)
+                    notif(label .. ": " .. (s and "On" or "Off"))
+                else
+                    notif("Halloween engine belum siap — tunggu 2-3 detik lalu coba lagi")
+                end
+            end
+        end
+        secHW:CreateToggle({Name="Auto Steal Halloween Eggs", Desc="Otomatis mencuri telur Halloween.", Callback=hwSet("SetEggs","Auto Steal Hw Eggs")})
+        secHW:CreateToggle({Name="Instant Steal Halloween Eggs", Desc="Instant steal telur Halloween.", Default=true, Callback=hwSet("SetInstant","Instant Steal")})
+        secHW:CreateToggle({Name="Auto Pumpkin Moon", Desc="Tangkap pumpkin saat Pumpkin Moon.", Default=true, Callback=hwSet("SetPumpkin","Auto Pumpkin Moon")})
+        secHW:CreateSlider({Name="Pumpkin Walk Speed", Min=100, Max=1000, Default=300, Increment=10, Desc="Speed saat Auto Pumpkin Moon.", Callback=function(v) local st=(typeof(getgenv)=="function"and getgenv().HalloweenState)or _G.HalloweenState; if st and st.SetPumpkinSpeed then pcall(st.SetPumpkinSpeed,v) end end})
+        secHW:CreateToggle({Name="Auto Buy Halloween Dimension Egg", Desc="Beli telur Halloween Dimension.", Callback=hwSet("SetBuy","Auto Buy Hw Dim Egg")})
         secHW:CreateLabel({Text="— Halloween Monsters —"})
-        secHW:CreateToggle({Name="Auto Farm Monsters", Desc="Bunuh monster Halloween untuk Candy Corn.", Callback=function(s) notif("Auto Farm Monsters: "..(s and "On" or "Off")) end})
-        secHW:CreateDropdown({Name="Monster Order", Options={"Closest","Most Tokens"}, Default="Closest", Desc="Urutan target monster."})
-        secHW:CreateSlider({Name="Monster Walk Speed", Min=100, Max=1000, Default=300, Increment=10, Desc="Kecepatan jalan saat farm monster."})
-
-        -- Sub-group: Ghost Dog & Fishing
+        secHW:CreateToggle({Name="Auto Farm Monsters", Desc="Bunuh monster Halloween dapat Candy Corn.", Callback=hwSet("SetMonsters","Auto Farm Monsters")})
+        secHW:CreateDropdown({Name="Monster Order", Options={"Closest","Most Tokens"}, Default="Closest", Desc="Urutan target monster.", Callback=function(v) local st=(typeof(getgenv)=="function"and getgenv().HalloweenState)or _G.HalloweenState; if st and st.SetMonsterOrder then pcall(st.SetMonsterOrder,v) end end})
+        secHW:CreateSlider({Name="Monster Walk Speed", Min=100, Max=1000, Default=300, Increment=10, Desc="Speed saat farm monster.", Callback=function(v) local st=(typeof(getgenv)=="function"and getgenv().HalloweenState)or _G.HalloweenState; if st and st.SetMonsterSpeed then pcall(st.SetMonsterSpeed,v) end end})
         secHW:CreateLabel({Text="— Ghost Dog & Fishing —"})
-        secHW:CreateToggle({Name="Auto Ghost Dog Quest", Desc="Selesaikan quest Ghost Dog otomatis.", Callback=function(s) notif("Auto Ghost Dog Quest: "..(s and "On" or "Off")) end})
-        secHW:CreateToggle({Name="Auto Halloween Fishing", Desc="Fishing otomatis di Halloween Dimension.", Callback=function(s) notif("Auto Halloween Fishing: "..(s and "On" or "Off")) end})
-
-        warn("[ClavvFix] Halloween Event section added (12 controls: 7 toggles, 2 sliders, 1 dropdown, 2 labels)")
+        secHW:CreateToggle({Name="Auto Ghost Dog Quest", Desc="Selesaikan quest Ghost Dog otomatis.", Callback=hwSet("SetDog","Auto Ghost Dog Quest")})
+        secHW:CreateToggle({Name="Auto Halloween Fishing", Desc="Fishing otomatis di Halloween Dimension.", Callback=hwSet("SetFishing","Auto Halloween Fishing")})
+        warn("[ClavvFix] Halloween Event section added (12 controls, terhubung ke engine via getgenv().HalloweenState)")
 
 
         -- ================= HIDE STEAL PANEL PERMANEN (sekali, tanpa loop) =================
