@@ -6149,7 +6149,7 @@ function ExecuteParry(...)
 end
     
     AutoParrySection:AddParagraph({
-        Title = ("â\154 ï¸\143 PENTING"),
+        Title = ("â\154 ï¸\143 PENTING"),
         Content = ("Wajib dimatikan saat di lobby dan dinyalakan lagi saat ingame, Jika tidak mengalami crash WAJIB MENYALAKAB SKIP ENDSCREEN.")
     })
     
